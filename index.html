@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API sandbox</title>
+</head>
+<body>
+    <button id="getText">Get Text</button>
+    <button id="getJSON">Get JSON file</button>
+    <button id="getAPI">Get API data</button>
+    <div id="content"></div>
+    <form id="addPost">
+        <div>
+            <input type="text" id="title">
+        </div>
+        <div>
+            <textarea id="body" placeholder="Write your post here"></textarea>
+        </div>
+        <input type="submit" value="Send">
+    </form>
+
+    <script>
+        document.getElementById("getText").addEventListener('click', getText);
+        document.getElementById("getJSON").addEventListener('click', getJSON);
+        document.getElementById("getAPI").addEventListener('click', getAPI);
+        document.getElementById("addPost").addEventListener('submit', getPost);
+
+        function getText() {
+            /*fetch('./sample.txt')
+            .then(function(res) {
+                return res.text();
+            })
+            .then(function (data) {
+                document.getElementById('content').innerHTML = data;
+            }); */
+
+            fetch('./sample.txt')
+            .then((res) => res.text())
+            .then((data) => document.getElementById('content').innerHTML = data)
+            .catch((err) => console.log(err));
+        }
+
+        function getJSON() {
+            fetch('./users.json')
+            .then((res) => (res.json()))
+            .then((data) => {
+                let content = '';
+                data.forEach((data) => {
+                    content += '<ul>';
+                    content += `<li>ID: ${data.id}</li>`;
+                    content += `<li>Name: ${data.name}</li>`;
+                    content += `<li>Email: ${data.email}</li>`;
+                    content += '</ul>';
+                });
+                document.getElementById('content').innerHTML = content
+            })
+            .catch((err) => console.log(err));
+        }
+
+        function getAPI() {
+            fetch('https://jsonplaceholder.typicode.com/todos')
+            .then((res) => (res.json()))
+            .then((data) => {
+                let content = '';
+                data.forEach((data) => {
+                    content += '<ul>';
+                    content += `<li>UserID: ${data.userId}</li>`;
+                    content += `<li>ID: ${data.id}</li>`;
+                    content += `<li>Title: ${data.title}</li>`;
+                    content += '</ul>';
+                });
+                document.getElementById('content').innerHTML = content
+            })
+            .catch((err) => console.log(err));
+        }
+
+        function addPost(e) {
+            e.preventDefault(); //21:38 Fetch API intro YouTube
+        }
+    </script>
+</body>
+</html>
